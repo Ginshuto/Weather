@@ -15,10 +15,11 @@ import {
 import { Col, Row, Grid } from "react-native-easy-grid";
 import Icon from "react-native-vector-icons/Ionicons";
 import { NavigationEvents } from "react-navigation";
+import { connect } from "react-redux";
 import { SwipeRow } from "react-native-swipe-list-view";
 // import ItemWeather from "../components/ItemWeather";
 
-export default class FavoritesPage extends Component {
+class FavoritesPage extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: "Favoris",
@@ -220,3 +221,8 @@ const styles = StyleSheet.create({
     marginBottom: 5
   }
 });
+const mapStateToProps = stateStore => ({
+  weatherServ: stateStore.weatherService
+});
+
+export default connect(mapStateToProps)(FavoritesPage);

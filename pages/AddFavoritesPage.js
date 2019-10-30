@@ -8,9 +8,10 @@ import {
   AsyncStorage
 } from "react-native";
 import WeatherService from "../services/weather-service";
+import {connect} from 'react-redux';
 
-export default class AddFavoritesPage extends Component {
-  serv2 = new WeatherService();
+class AddFavoritesPage extends Component {
+  // serv2 = new WeatherService();
 
   static navigationOptions = {
     title: "Ajouter une Ville"
@@ -33,7 +34,7 @@ export default class AddFavoritesPage extends Component {
         tab = JSON.parse(data);
       }
       if (tab.length < 15) {
-        this.serv2
+        this.props.weatherServ
           .getWeatherHome(this.state.cityName)
           .then(res => {
             let city = {
@@ -72,3 +73,8 @@ export default class AddFavoritesPage extends Component {
     );
   }
 }
+const mapStateToProps = stateStore => ({
+  weatherServ: stateStore.weatherService
+});
+
+export default connect(mapStateToProps)(AddFavoritesPage);

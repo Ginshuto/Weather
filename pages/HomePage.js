@@ -9,14 +9,11 @@ import {
 } from "react-native";
 import WeatherService from "../services/weather-service";
 import Loading from "../components/loading";
-import { createStore } from "redux";
 import { connect } from "react-redux";
-import mainReducer from "../reducers/reducers";
-import { ImgWeather } from "./FavoritesPage";
 // import LinearGradient from "react-native-linear-gradient";
 
 class HomePage extends React.Component {
-  serv = new WeatherService();
+  // serv = new WeatherService();
   constructor(props) {
     super(props);
   }
@@ -42,7 +39,7 @@ class HomePage extends React.Component {
         console.log(lat);
         const lon = position.coords.longitude;
         console.log(lon);
-        this.serv
+        this.props.weatherServ
           .getWeatherMe(lat, lon)
           .then(resp => {
             this.setState({ me: resp.data });
@@ -54,7 +51,7 @@ class HomePage extends React.Component {
       error => Alert.alert(error.message),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
-      this.serv
+      this.props.weatherServ
         .getWeatherHome("marseille")
         .then(resp => {
           this.setState({ wea: resp.data });
@@ -185,22 +182,21 @@ const Sunset = props => {
     <Text>Coucher du Soleil : {`${dt.getHours()}h${dt.getMinutes()}`}</Text>
   );
 };
-function mapStateToProps(state) {
-  return state;
-}
 
-const mapDispatchToProps = dispatch => {
-  return {
-    dispatch: action => {
-      dispatch(action);
-    }
-  };
+const ImgWeather = props => {
+  return (
+    <Image
+      style={{ width: 40, height: 40 }}
+      source={{ uri: `http://openweathermap.org/img/wn/${props.icon}@2x.png` }}
+    />
+  );
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(HomePage);
+const mapStateToProps = stateStore => ({
+  weatherServ: stateStore.weatherService
+});
+
+export default connect(mapStateToProps)(HomePage);
 const styles = StyleSheet.create({
   Clear: {
     backgroundColor: "blue",
